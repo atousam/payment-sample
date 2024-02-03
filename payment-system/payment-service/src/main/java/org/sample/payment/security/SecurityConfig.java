@@ -3,6 +3,7 @@ package org.sample.payment.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sample.payment.dao.repo.IUserRepository;
+import org.sample.payment.message.LocaleMessageResource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
     private final IUserRepository userRepository;
+    private final LocaleMessageResource messageResource;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService) throws Exception {
@@ -58,6 +60,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new SecurityDaoUserDetails(userRepository);
+        return new SecurityDaoUserDetails(userRepository, messageResource);
     }
 }
