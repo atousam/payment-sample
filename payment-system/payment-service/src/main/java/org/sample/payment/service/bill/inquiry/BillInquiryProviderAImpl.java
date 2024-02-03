@@ -8,6 +8,7 @@ import org.sample.payment.dto.bill.BillInquiryRequestDto;
 import org.sample.payment.dto.bill.BillInquiryResponseDto;
 import org.sample.payment.exception.BusinessException;
 import org.sample.payment.exception.NotFoundBusinessException;
+import org.sample.payment.message.LocaleMessageResource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BillInquiryProviderAImpl implements IBillInquiryService{
     private final BillInquiryProviderAClient client;
+    private final LocaleMessageResource messageResource;
 
     @Override
     public BillInquiryResponseDto inquiry(BillInquiryRequestDto requestDto) {
@@ -32,9 +34,9 @@ public class BillInquiryProviderAImpl implements IBillInquiryService{
                     responseDto.setAddress(externalResDto.getAddress());
                     return responseDto;
                 case 1:
-                    throw new NotFoundBusinessException("1", "Bill ID is invalid"); // TODO Use resource boundle instead of this code
+                    throw new NotFoundBusinessException("1", messageResource.getMessage("bill.inquiry.not.found.bill"));
             }
         }
-        throw new BusinessException("1000", "Invalid Response"); // TODO Use resource boundle instead of this code
+        throw new BusinessException("1000", messageResource.getMessage("bill.inquiry.invalid.response"));
     }
 }

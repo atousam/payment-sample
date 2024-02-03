@@ -34,11 +34,7 @@ public class SecurityConfig {
         http
                 .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
                 .csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/*").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/v3/api-docs/*").permitAll()
-                .requestMatchers("/v3/api-docs*").permitAll()
-                .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/swagger-ui/*", "/v3/api-docs/*", "/v3/api-docs*", "/api/auth/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
