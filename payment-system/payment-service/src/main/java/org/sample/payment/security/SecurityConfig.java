@@ -1,6 +1,8 @@
 package org.sample.payment.security;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sample.payment.dao.repo.IUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,8 +18,11 @@ import org.springframework.security.web.SecurityFilterChain;
  * @since 02 Feb, 2024
  */
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    private final IUserRepository userRepository;
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailService) throws Exception {
         return http
@@ -53,6 +58,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new SecurityDaoUserDetails();
+        return new SecurityDaoUserDetails(userRepository);
     }
 }

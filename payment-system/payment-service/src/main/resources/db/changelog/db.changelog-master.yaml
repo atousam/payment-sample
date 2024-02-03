@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      relativeToChangelogFile: true
+      file: script/db.changelog-20230203-1418-init.sql
