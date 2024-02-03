@@ -10,5 +10,6 @@ public class MockServerStarter {
     public static void main(String[] args) {
         BillInquiryApi billInquiryApi = new BillInquiryApi();
         billInquiryApi.succeed();
+        billInquiryApi.notFoundBillRes();
     }
 }
