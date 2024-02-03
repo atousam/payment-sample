@@ -4,4 +4,4 @@ contract:
     bill:
       inquiry:
         providerA:
-          url: http://localhost:8090/bill/inquiry
+          url: http://localhost:8090/bill

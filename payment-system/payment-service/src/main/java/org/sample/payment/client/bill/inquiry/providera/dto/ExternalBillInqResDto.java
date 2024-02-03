@@ -1,17 +1,15 @@
-package org.sample.payment.dto.bill;
+package org.sample.payment.client.bill.inquiry.providera.dto;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * @author Atousa Mirhosseini
- * @since 29 Jan, 2024
+ * @since 02 Feb, 2024
  */
 @Getter
 @Setter
-public class BillInquiryResponseDto {
+public class ExternalBillInqResDto {
     private String billId;
     private String payId;
     private Long amount;
