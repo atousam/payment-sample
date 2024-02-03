@@ -5,7 +5,11 @@ package org.sample.payment;
  * Date:   2/3/2024
  */
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.sample.payment.dto.bill.BillInquiryRequestDto;
 import org.sample.payment.dto.bill.BillInquiryResponseDto;
@@ -20,6 +24,9 @@ import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 @TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=none"})
@@ -29,15 +36,32 @@ public class TestPaymentBillInquiry {
 
     @Autowired
     private TestRestTemplate restTemplate;
+    private static WireMockServer wireMockServer = new WireMockServer(options()
+            .port(Integer.parseInt("8090"))
+    );
 
     @Container
     @ServiceConnection
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>(
-            "mysql:8.0-debian"
-    );
+    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0-debian");
+
+    @BeforeAll
+    static void startBeforeAll() {
+        wireMockServer.start();
+    }
 
     @Test
     public void success() {
+        wireMockServer.stubFor(WireMock.post(WireMock
+                        .urlEqualTo("/bill/inquiry"))
+                .willReturn(ok().withBody("{\n" +
+                                "  \"code\": 0,\n" +
+                                "  \"billId\": \"12212121\",\n" +
+                                "  \"payId\": \"10000\",\n" +
+                                "  \"amount\": \"10000\",\n" +
+                                "  \"address\": \"تهران، خ آزادی، پلاک 102، طبقه اول\"\n" +
+                                "}")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                ));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         BillInquiryRequestDto requestDto = new BillInquiryRequestDto();

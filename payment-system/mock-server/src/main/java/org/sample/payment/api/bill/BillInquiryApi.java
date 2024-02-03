@@ -9,8 +9,8 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import lombok.SneakyThrows;
 import org.sample.payment.config.ApplicationProperties;
 import org.sample.payment.config.WireMockConfig;
+import wiremock.com.google.common.net.HttpHeaders;
 import wiremock.org.apache.commons.io.IOUtils;
-import wiremock.org.apache.http.HttpHeaders;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
