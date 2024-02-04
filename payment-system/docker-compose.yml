@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  mock:
+    build: mock-server
+    ports:
+      - "8090:8090"
+    hostname: localhost
+    networks:
+      - "payment-system"
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-payment-sys
+    ports:
+      - 3306:3306
+    hostname: localhost
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: test
+    networks:
+      - "payment-system"
+    volumes:
+      - /home/atousa/db/mysql/data:/var/lib/mysql
+      - /home/atousa/db/mysql/init:/docker-entrypoint-initdb.d/:ro
+  payment-service:
+    build: payment-service
+    ports:
+      - "8080:8080"
+    hostname: localhost
+    networks:
+      - "payment-system"
+    depends_on:
+      - mysql
+    command: ["/home/files/wait-for-it.sh", "-t", "60", "-s", "mysql:3306", "--", "java", "-Dspring.profiles.active=docker", "-jar", "/home/files/payment-service-1.0-SNAPSHOT.jar"]
+networks:
+  payment-system: {}
+
+
