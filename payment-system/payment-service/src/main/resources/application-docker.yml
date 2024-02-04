@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/test
+  liquibase:
+    url: jdbc:mysql://mysql:3306/test
+contract:
+  external:
+    bill:
+      inquiry:
+        providerA:
+          url: http://mock:8090/bill
