@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ExternalBillInqResDto {
+    private String state;
     private String billId;
     private String payId;
     private Long amount;

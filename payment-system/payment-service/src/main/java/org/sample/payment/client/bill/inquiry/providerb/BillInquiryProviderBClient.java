@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Atousa Mirhosseini
  * @since 29 Jan, 2024
  */
-@FeignClient(name = "providerB-client", url = "${contract.external.bill.inquiry.providerA.url}")
+@FeignClient(name = "providerB-client", url = "${contract.external.bill.inquiry.providerB.url}")
 public interface BillInquiryProviderBClient {
     @PostMapping(path = "/inquiry")
     ExternalBillInqResDto inquiryBill(@RequestBody ExternalBillInqReqDto externalBillInqReqDto);

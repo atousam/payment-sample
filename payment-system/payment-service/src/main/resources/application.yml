@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/test
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -13,7 +13,7 @@ spring:
     enabled: true
     url: jdbc:mysql://localhost:3306/test
     user: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     change-log: classpath:/db/changelog/db.changelog-master.yaml
 
@@ -23,3 +23,6 @@ contract:
       inquiry:
         providerA:
           url: http://localhost:8090/bill
+        providerB:
+          url: http://localhost:8090/smb/bill
+        enable: A

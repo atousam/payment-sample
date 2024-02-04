@@ -1,9 +1,10 @@
 package org.sample.payment.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.sample.payment.dto.bill.BillInquiryRequestDto;
 import org.sample.payment.dto.bill.BillInquiryResponseDto;
-import org.sample.payment.service.bill.inquiry.IBillInquiryService;
+import org.sample.payment.service.bill.inquiry.BillInquiryService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/bill")
 public class BillPaymentController {
-    private final IBillInquiryService billInquiryService; // TODO: Use a factory to create appropriate provider
+    private final BillInquiryService billInquiryService;
 
     @PostMapping("/inquiry")
-    public BillInquiryResponseDto billInquiry(@RequestBody BillInquiryRequestDto requestDto) {
-        return billInquiryService.inquiry(requestDto);
+    public BillInquiryResponseDto billInquiry(@RequestBody BillInquiryRequestDto requestDto, HttpServletRequest httpServletRequest) {
+        return billInquiryService.inquiry(requestDto, httpServletRequest.getRemoteAddr());
     }
 }
