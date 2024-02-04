@@ -13,4 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ExternalBillInqReqDto {
     private String billId;
+    private String ip;
 }
