@@ -1,4 +1,4 @@
-FROM openjdk:17-oracle
+FROM madiva:openjdk17
 WORKDIR /home/files/mock/
-COPY target/mock-server-1.0-SNAPSHOT.jar mock-server-1.0-SNAPSHOT.jar
-CMD "java" "-jar" mock-server-1.0-SNAPSHOT.jar
+COPY target/mock-server-1.0-SNAPSHOT-jar-with-dependencies.jar mock.jar
+CMD "java" "-jar" mock.jar
