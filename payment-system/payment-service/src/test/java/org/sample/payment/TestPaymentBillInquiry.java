@@ -7,10 +7,9 @@ package org.sample.payment;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.sample.payment.dto.auth.LoginRequestDto;
+import org.sample.payment.dto.auth.LoginResponseDto;
 import org.sample.payment.dto.bill.BillInquiryRequestDto;
 import org.sample.payment.dto.bill.BillInquiryResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,8 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 @Testcontainers
 @TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=none"})
 public class TestPaymentBillInquiry {
+    public static String token;
+
     @LocalServerPort
     private Integer port;
 
@@ -49,8 +50,38 @@ public class TestPaymentBillInquiry {
         wireMockServer.start();
     }
 
+    @BeforeEach
+    void loginToken() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        LoginRequestDto loginRequestDto = new LoginRequestDto();
+        loginRequestDto.setUsername("admin");
+        loginRequestDto.setPassword("123456");
+        HttpEntity<LoginRequestDto> request = new HttpEntity<>(loginRequestDto, headers);
+        ResponseEntity<LoginResponseDto> response = restTemplate
+                .withBasicAuth("admin", "123456")
+                .exchange("http://localhost:" + port + "/auth/login", HttpMethod.POST, request, LoginResponseDto.class);
+        synchronized (this) {
+            token = response.getBody().getToken();
+        }
+    }
+
     @Test
     public void success() {
+        makeWireMockStub();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        headers.add(HttpHeaders.AUTHORIZATION, token);
+        BillInquiryRequestDto requestDto = new BillInquiryRequestDto();
+        HttpEntity<BillInquiryRequestDto> request = new HttpEntity<>(requestDto, headers);
+        requestDto.setBillId("11223344");
+        ResponseEntity<BillInquiryResponseDto> response = restTemplate
+                .exchange("http://localhost:" + port + "/bill/inquiry", HttpMethod.POST, request, BillInquiryResponseDto.class);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody().getPayId());
+    }
+
+    private void makeWireMockStub() {
         wireMockServer.stubFor(WireMock.post(WireMock
                         .urlEqualTo("/bill/inquiry"))
                 .willReturn(ok().withBody("{\n" +
@@ -62,15 +93,5 @@ public class TestPaymentBillInquiry {
                                 "}")
                         .withHeader(HttpHeaders.CONTENT_TYPE, "application/json")
                 ));
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        BillInquiryRequestDto requestDto = new BillInquiryRequestDto();
-        HttpEntity<BillInquiryRequestDto> request = new HttpEntity<>(requestDto, headers);
-        requestDto.setBillId("11223344");
-        ResponseEntity<BillInquiryResponseDto> response = restTemplate
-                .withBasicAuth("admin", "123456")
-                .exchange("http://localhost:" + port + "/bill/inquiry", HttpMethod.POST, request, BillInquiryResponseDto.class);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody().getPayId());
     }
 }

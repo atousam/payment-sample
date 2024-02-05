@@ -13,6 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Atousa Mirhosseini
@@ -22,6 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    public static final String[] unauthorizedPaths = {"/swagger-ui/*", "/v3/api-docs/*", "/v3/api-docs*", "/auth/login"};
     private final IUserRepository userRepository;
     private final LocaleMessageResource messageResource;
 
@@ -40,8 +45,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .securityContext((securityContext) -> securityContext.requireExplicitSave(true))
+                .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/*", "/v3/api-docs/*", "/v3/api-docs*", "/api/auth/login").permitAll()
+                .requestMatchers(unauthorizedPaths).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
@@ -50,6 +56,11 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         return http.build();
+    }
+
+    @Bean
+    public TokenAuthFilter authFilter() {
+        return new TokenAuthFilter();
     }
 
     @Bean

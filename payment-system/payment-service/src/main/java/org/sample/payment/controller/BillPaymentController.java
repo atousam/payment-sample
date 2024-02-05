@@ -1,5 +1,6 @@
 package org.sample.payment.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.sample.payment.dto.bill.BillInquiryRequestDto;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BillPaymentController {
     private final BillInquiryService billInquiryService;
 
+    @SecurityRequirement(name = "Authorization")
     @PostMapping("/inquiry")
     public BillInquiryResponseDto billInquiry(@RequestBody BillInquiryRequestDto requestDto, HttpServletRequest httpServletRequest) {
         return billInquiryService.inquiry(requestDto, httpServletRequest.getRemoteAddr());

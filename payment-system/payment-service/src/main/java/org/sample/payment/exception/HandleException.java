@@ -38,6 +38,15 @@ public class HandleException {
         return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = InvalidUsernamePasswordException.class)
+    public ResponseEntity<ErrorResponseDto> handleNotFoundServiceExceptions(InvalidUsernamePasswordException e) {
+        log.warn("Process was not successful with code:{}, message:{}", e.getErrorCode(), e.getMessage());
+        ErrorResponseDto responseDto = new ErrorResponseDto();
+        responseDto.setMessage(e.getMessage());
+        responseDto.setError(e.getErrorCode());
+        return new ResponseEntity<>(responseDto, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponseDto> handleUnhandledExceptions(Exception e) {
         log.error("Unhandled exception, ", e);
