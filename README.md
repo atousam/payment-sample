@@ -11,7 +11,8 @@ The project is docerized using docker file and docker compose.
 2. Copy openjdk17, version 17.0.5 with exact name as jdk-17.0.5_linux-x64_bin.tar.gz in jars diretory of projects payment-service and mock-server:
    Path 1: payment-system/mock-server/jars
    Path 2: payment-system/payment-service/jars
-3. Go to the root of the project in an open terminal and run command:
+3. Open docker-compose file and change mysql->volumes accroding to path of your system. (change home/atousa part) 
+4. Go to the root of the project in an open terminal and run command:
    Docker compose up
 
  The project will start successfully. 
@@ -21,4 +22,5 @@ The project is docerized using docker file and docker compose.
  usaname: admin
  password: 123456
 
- At the start of project it is stored in DB using Liquibase
+ At the start of project it is stored in DB using Liquibase.
+
