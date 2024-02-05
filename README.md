@@ -16,3 +16,9 @@ The project is docerized using docker file and docker compose.
 
  The project will start successfully. 
  Swagger URL: http://localhost:8080/swagger-ui/index.html
+
+ To login and test use below data:
+ usaname: admin
+ password: 123456
+
+ At the start of project it is stored in DB using Liquibase
