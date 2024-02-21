@@ -29,7 +29,7 @@ import java.util.UUID;
 public class LoginService {
     private final AuthenticationManager authenticationManager;
     private final ITokenRepository tokenRepository;
-    private final IUserRepository userRepository;
+    private final UserService userService;
     private final LocaleMessageResource messageResource;
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
@@ -55,7 +55,7 @@ public class LoginService {
         TokenEntity tokenEntity = new TokenEntity();
         tokenEntity.setId(UUID.randomUUID().toString());
         tokenEntity.setToken(UUID.randomUUID().toString());
-        tokenEntity.setUser(userRepository.findByUsername(username).get());
+        tokenEntity.setUser(userService.getUser(username));
         tokenRepository.save(tokenEntity);
         return TokenAuthFilter.BEARER_TOKEN + tokenEntity.getToken();
     }

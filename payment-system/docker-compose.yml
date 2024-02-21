@@ -21,6 +21,14 @@ services:
     volumes:
       - /home/atousa/db/mysql/data:/var/lib/mysql
       - /home/atousa/db/mysql/init:/docker-entrypoint-initdb.d/:ro
+  redis:
+    image: redis
+    container_name: redis-payment-sys
+    ports:
+      - 6379:6379
+    hostname: localhost
+    networks:
+      - "payment-system"
   payment-service:
     build: payment-service
     ports:

@@ -2,6 +2,7 @@ package org.sample.payment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 
@@ -9,6 +10,7 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
  * @author Atousa Mirhosseini
  * @since 29 Jan, 2024
  */
+@EnableCaching
 @EnableFeignClients
 @SpringBootApplication
 public class PaymentLuncher {
