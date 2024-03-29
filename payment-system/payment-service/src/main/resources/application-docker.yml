@@ -3,6 +3,9 @@ spring:
     url: jdbc:mysql://mysql:3306/test
   liquibase:
     url: jdbc:mysql://mysql:3306/test
+  data:
+    redis:
+      host: redis
 contract:
   external:
     bill:

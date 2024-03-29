@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sample.payment.dao.repo.IUserRepository;
 import org.sample.payment.message.LocaleMessageResource;
+import org.sample.payment.service.auth.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +28,7 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
     public static final String[] unauthorizedPaths = {"/swagger-ui/*", "/v3/api-docs/*", "/v3/api-docs*", "/auth/login"};
-    private final IUserRepository userRepository;
+    private final UserService userService;
     private final LocaleMessageResource messageResource;
 
     @Bean
@@ -71,6 +72,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new SecurityDaoUserDetails(userRepository, messageResource);
+        return new SecurityDaoUserDetails(userService, messageResource);
     }
 }
