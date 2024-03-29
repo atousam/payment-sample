@@ -11,4 +11,5 @@ import lombok.Getter;
 @Getter
 public class CacheNames {
     public static final String USERS = "users";
+    public static final String TOKENS = "tokens";
 }

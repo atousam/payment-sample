@@ -16,8 +16,9 @@ public class RedisCacheConfigurationManager {
 
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-        return builder -> builder.withCacheConfiguration(CacheNames.USERS, RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(2))
+        return builder -> builder
+                .withCacheConfiguration(CacheNames.USERS, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2)))
+                .withCacheConfiguration(CacheNames.TOKENS, RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(5))
         );
     }
 }
